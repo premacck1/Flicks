@@ -13,7 +13,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     @IBOutlet weak var tableView: UITableView!
     var movies: [NSDictionary]?
-    
+    var endPoint: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -21,8 +21,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
+        networkRequest(refreshControl: refreshControl);
+}
+    func networkRequest(refreshControl: UIRefreshControl){
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endPoint)?api_key=\(apiKey)")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -38,12 +41,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         task.resume()
-        
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endPoint)?api_key=\(apiKey)")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
