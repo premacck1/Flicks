@@ -38,6 +38,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         task.resume()
+        
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -97,6 +98,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         return cell
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! MovieDetailViewController
+        if let cell = sender as? MovieCell{
+            vc.image = cell.posterView.image
+        }
+
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
+    }
+    
     /*
     // MARK: - Navigation
 
